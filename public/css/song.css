@@ -1,1 +1,38 @@
 /* song css */
+
+.song {
+  display: flex;
+  margin: 5px;
+  border-bottom: 2px;
+  border-bottom: grey;
+  border-bottom: solid;
+}
+
+.song__rank {
+  display: flex;
+  flex-direction: initial;
+  left: 0px;
+}
+
+.song__title {
+  font-size: 15px;
+  display: flex;
+}
+
+.song__artist {
+  font-style: italic;
+  font-size: 12px;
+  display: flex;
+}
+
+.song__streams {
+  display: flex;
+  flex-direction: column;
+  font-size: 6px;
+}
+
+.song__publicationDate {
+  display: flex;
+  flex-direction: column-reverse;
+  font-size: 12px;
+}
