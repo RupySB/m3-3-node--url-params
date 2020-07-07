@@ -1,0 +1,9 @@
+<%- include( '../partials/header') %>
+
+<ol>
+    <% top50.forEach((song) =>{ %>
+       <li> <%-  include('../partials/song', {song}) %></li> 
+   <% }); %>
+</ol>
+
+<%- include( '../partials/footer') %>
