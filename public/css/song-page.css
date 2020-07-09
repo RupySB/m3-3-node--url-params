@@ -1,1 +1,17 @@
 /* song page css */
+.song__title {
+  font-size: 15px;
+  display: flex;
+}
+
+.song__artist {
+  font-style: italic;
+  font-size: 12px;
+  display: flex;
+}
+
+.song__streams {
+  display: flex;
+  flex-direction: column;
+  font-size: 6px;
+}
