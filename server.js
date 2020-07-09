@@ -18,7 +18,6 @@ app.set("view engine", "ejs");
 app.get("/top50", (req, res) => {
   res.render("pages/top50", {
     title: "Top 50 Songs Streamed on Spotify",
-    myName: "Rupy",
     top50,
   });
 });
@@ -34,18 +33,58 @@ app.get("*", (req, res) => {
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-//1.5 - popularArtist - I tried it below...not sure how to continue
-// const popularArtist = (req, res) => {
-//     const song.artist = {};
-//     top50.forEach((song) => {
-//         if (song.artist === "Justin Beiber"){
-//             popularArtist.push(song.artist);
-//         }
-//         else (
-//         res.render("pages/fourOhFour", {
-//           title: "I got nothing",
-//           path: req.originalUrl,)
-//         });
+// 1.5 - popularArtist - I tried it below...not sure how to continue
+const popularArtist = (req, res) => {
+  function mode() {
+    let numArtist = {};
+    let highestFrequency = 0;
+    let mode;
+    top50.forEach(function findMode(number) {
+      numArtist[number] = (numArtist[number] || 0) + 1;
 
-//         )
-//     })
+      if (highestFrequency < numArtist[number]) {
+        highestFrequency = numArtist[number];
+        mode === number;
+      }
+    });
+    return mode;
+  }
+  console.log(mode());
+  res.render("pages/popularArtist", {
+    title: "Most Popular Artist",
+  });
+};
+
+//1.7:
+
+// const individualsongPage = (req, res) => {
+//   const rank = req.params.rank;
+//   res.render;
+//   function range() {
+//     if (rank.length === 1) {
+//       edge = start;
+//       start = 0;
+//     }
+//     edge = edge || 0;
+//     step = step || 1;
+//     for (rank = []; (edge - start) * step > 0; start += step) {
+//       ret.push(start);
+//     }
+//     e
+//     return ret;
+//   }
+// };
+
+const individualsongPage = (req, res) => {
+  const rank = req.params.rank;
+  if (top50[rank]) {
+    res.render("pages/song-Page", {
+      song: top50[rank],
+    });
+  } else {
+    res.redirect("pages/fourOhfour", {
+      title: "I got nothing",
+      path: req.originalUrl,
+    });
+  }
+};
