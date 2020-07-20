@@ -6,8 +6,81 @@ const { top50 } = require("./data/top50");
 
 const PORT = process.env.PORT || 8000;
 
+const individualsongPage = (req, res) => {
+  const rank = req.params.rank;
+  if (top50[rank]) {
+    res.render("pages/song-Page", {
+      title: "Song #" + rank,
+      song: top50[rank],
+    });
+  } else {
+    res.redirect("pages/fourOhfour", {
+      title: "I got nothing",
+      path: req.originalUrl,
+    });
+  }
+};
 const app = express();
-//this is used to make the stuff on line 20 easier to write
+
+const popularArtist = (req, res) => {
+  const artists = [];
+  const artistCount = {};
+  top50.forEach((song) => {
+    if (!artists.includes(song.artist)) {
+      artists.push(song.artist);
+    }
+  });
+  artists.forEach((artist) => {
+    let count = 0;
+    top50.forEach((song) => {
+      if (song.artist === artist) count += 1;
+    });
+    artistCount[artist] = count;
+  });
+
+  const rankedArtists = [];
+  Object.values(artistCount).forEach((count, id) => {
+    const artist = Object.keys(artistCount)[id];
+    rankedArtists.push({
+      artist: artist,
+      count: count,
+    });
+  });
+  const mostPopularArtist = rankedArtists.sort((a, b) =>
+    a.count < b.count ? 1 : -1
+  )[0].artist;
+
+  res.render("/pages/popularArtist", {
+    title: "Most Popular Artist",
+    songs: top50.filter((song) => song.artist === mostPopularArtist),
+  });
+};
+// const popularArtist = (req, res) => {
+//   function getModes(array) {
+//     const top50 = {};
+//     let maxFreq = 0;
+//     let modes = [];
+
+//     for (let i in array) {
+//       top50[array[i]] = (top50[array[i]] || 0) + 1; // increment frequency.
+
+//       if (top50[array[i]] > maxFreq) {
+//         maxFreq = top50[array[i]]; // update max.
+//       }
+//     }
+
+//     for (var k in top50) {
+//       if (top50[k] == maxFreq) {
+//         modes.push(k);
+//       }
+//     }
+//     return modes;
+//   }
+//   res.render("pages/popularArtist", {
+//     title: "Most Popular Artist",
+//     songs: top50[k].modes.push(k),
+//   });
+// };
 
 app.use(morgan("dev"));
 app.use(express.static("public"));
@@ -22,6 +95,9 @@ app.get("/top50", (req, res) => {
   });
 });
 
+app.get("/top50/song/:rank", individualsongPage);
+app.get("/top50/popularArtist", popularArtist);
+
 // handle 404s
 app.get("*", (req, res) => {
   res.status(404);
@@ -32,59 +108,3 @@ app.get("*", (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-// 1.5 - popularArtist - I tried it below...not sure how to continue
-const popularArtist = (req, res) => {
-  function mode() {
-    let numArtist = {};
-    let highestFrequency = 0;
-    let mode;
-    top50.forEach(function findMode(number) {
-      numArtist[number] = (numArtist[number] || 0) + 1;
-
-      if (highestFrequency < numArtist[number]) {
-        highestFrequency = numArtist[number];
-        mode === number;
-      }
-    });
-    return mode;
-  }
-  console.log(mode());
-  res.render("pages/popularArtist", {
-    title: "Most Popular Artist",
-  });
-};
-
-//1.7:
-
-// const individualsongPage = (req, res) => {
-//   const rank = req.params.rank;
-//   res.render;
-//   function range() {
-//     if (rank.length === 1) {
-//       edge = start;
-//       start = 0;
-//     }
-//     edge = edge || 0;
-//     step = step || 1;
-//     for (rank = []; (edge - start) * step > 0; start += step) {
-//       ret.push(start);
-//     }
-//     e
-//     return ret;
-//   }
-// };
-
-const individualsongPage = (req, res) => {
-  const rank = req.params.rank;
-  if (top50[rank]) {
-    res.render("pages/song-Page", {
-      song: top50[rank],
-    });
-  } else {
-    res.redirect("pages/fourOhfour", {
-      title: "I got nothing",
-      path: req.originalUrl,
-    });
-  }
-};
