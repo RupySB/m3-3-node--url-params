@@ -7,14 +7,16 @@ const { top50 } = require("./data/top50");
 const PORT = process.env.PORT || 8000;
 
 const individualsongPage = (req, res) => {
-  const rank = req.params.rank;
+  const rank = req.params.rank - 1; //fixed error for rank!
   if (top50[rank]) {
     res.render("pages/song-Page", {
       title: "Song #" + rank,
       song: top50[rank],
     });
   } else {
-    res.redirect("pages/fourOhfour", {
+    res.status(404); //fixed up status!
+    res.render("pages/fourOhFour", {
+      //fixed typo
       title: "I got nothing",
       path: req.originalUrl,
     });
